@@ -1,0 +1,6 @@
+# игнорим)
+
+*.iml
+.idea
+/out/
+/target/
