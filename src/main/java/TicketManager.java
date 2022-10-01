@@ -1,4 +1,6 @@
 import java.util.Arrays;
+import java.util.Comparator;
+
 
 public class TicketManager {
 
@@ -17,6 +19,33 @@ public class TicketManager {
         repo.removeById(ticket.id);
         return repo.findAll();
     }
+
+
+
+//    TicketByTravelTimeAscComparator travelTimeAscComparator = new TicketByTravelTimeAscComparator();
+
+    public Ticket[] findAllSortByTravelTime(String departureAirport, String arrivalAirport, Comparator<Ticket> ticketComparator) {
+        Ticket[] result = new Ticket[0]; //тут сохранятся подощедшие по запросу
+        for (Ticket ticket : repo.findAll()) {
+            if (matches(ticket, departureAirport, arrivalAirport)) {
+
+                //добавляем в конец массива result продукт product
+                Ticket[] tmp = new Ticket[result.length + 1];
+                System.arraycopy(result, 0, tmp, 0, result.length);
+
+                tmp[tmp.length - 1] = ticket;
+                result = tmp;
+
+            }
+        }
+        Arrays.sort(result, ticketComparator);
+        return result;
+    }
+
+
+
+
+
 
 
     public Ticket[] findAll(String departureAirport, String arrivalAirport) {
