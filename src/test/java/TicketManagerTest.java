@@ -3,7 +3,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
+
+
 public class TicketManagerTest {
+
+    TicketByTravelTimeAscComparator travelTimeAscComparator = new TicketByTravelTimeAscComparator();
+    
 
     private TicketRepository repo = new TicketRepository();
     private TicketManager manager = new TicketManager(repo);
@@ -24,6 +29,7 @@ public class TicketManagerTest {
         manager.add(ticket2);
         manager.add(ticket3);
     }
+
 
 
     @Test
@@ -75,6 +81,40 @@ public class TicketManagerTest {
         Ticket[] expected = {ticket1, ticket7, ticket8, ticket6, ticket9};
 
         Ticket[] actual = manager.findAll("SKX", "LED");
+
+        Assertions.assertArrayEquals(expected, actual);
+
+    }
+
+
+    @Test
+    public void shouldSearchTicketFromToAndSortComparator() {
+
+        manager.add(ticket6);
+        manager.add(ticket8);
+        manager.add(ticket9);
+
+        Ticket[] expected = {ticket1, ticket6, ticket9, ticket8};
+
+        Ticket[] actual = manager.findAllSortByTravelTime("SKX", "LED", travelTimeAscComparator);
+
+        Assertions.assertArrayEquals(expected, actual);
+
+    }
+
+
+    @Test
+    public void shouldSearchTicketFromToAndSortComparatorIdenticalTime() {
+
+        manager.add(ticket6);
+        manager.add(ticket8);
+        manager.add(ticket7);
+        manager.add(ticket1);
+        manager.add(ticket9);
+
+        Ticket[] expected = {ticket1, ticket7, ticket1, ticket6, ticket9, ticket8};
+
+        Ticket[] actual = manager.findAllSortByTravelTime("SKX", "LED", travelTimeAscComparator);
 
         Assertions.assertArrayEquals(expected, actual);
 
